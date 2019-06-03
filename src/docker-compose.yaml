@@ -1,0 +1,23 @@
+---
+version: "3.7"
+services:
+  terraform:
+    build:
+      context: .
+      args:
+        - buildno
+        - gitcommithash
+    image: terraform:latest
+    volumes:
+      - $SSH_AUTH_SOCK:/tmp/agent.sock
+      - ~/.aws:/terraform/.aws:ro
+      - ~/.chef:/terraform/.chef:ro
+      - ~/.ssh:/terraform/.ssh:ro
+      - /etc/resolv.conf:/etc/resolv.conf:ro
+      - ~/src/github.com/wix-system/production_42:/terraform/42
+    environment:
+      - SSH_AUTH_SOCK=/tmp/agent.sock
+      - USER=$USER
+    extra_hosts:
+      - chef.wixpress.com:10.42.60.120
+...
